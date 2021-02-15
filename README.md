@@ -17,5 +17,5 @@ Use this end point: http://localhost:8080/web-crawler/crawl?url=<<website url>>
 Please note, REST end point is just an additional feature added just to facilitate the testing. It neither has  
 a robust exceptional handling nor any tests.
 
-Here is how the sample output is:
+Please look at "postman-output.png" for sample output using postman.
 
