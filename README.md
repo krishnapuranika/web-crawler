@@ -10,12 +10,13 @@ Please note this will generate a jar in the target folder
 
 To run:
 Option 1: Run it as spring-boot:run using editor
-Option 2: java -jar jarget/web-crawler-0.0.1-SNAPSHOT.jar. I will upload a jar in the project for reference.
+Option 2: java -jar jarget/web-crawler-0.0.1-SNAPSHOT.jar.
 
 Use this end point: http://localhost:8080/web-crawler/crawl?url=<<website url>>
 
 Please note, REST end point is just an additional feature added just to facilitate the testing. It neither has  
 a robust exceptional handling nor any tests.
 
-Please look at "postman-output.png" for sample output using postman.
+Please look at "files/postman-output.png" for sample output using postman.
+Please use jar uploaded in "files" folder to use and run the application directly.
 
