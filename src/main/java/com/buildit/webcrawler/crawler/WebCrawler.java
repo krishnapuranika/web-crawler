@@ -1,35 +1,43 @@
 package com.buildit.webcrawler.crawler;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 
 public class WebCrawler {
 
-    private HashSet<String> internalUrls = new HashSet<>();
-
-    private static final String QUERY_REF = "a[href]";
     private static final String ATTRIBUTE_KEY = "abs:href";
+    private final HashSet<String> internalUrls = new HashSet<>();
+    private final WebDocumentService webDocumentService;
 
-    public HashSet<String> crawlTheWeb(String url) throws IOException {
-        crawl(url);
+    public WebCrawler(WebDocumentService webDocumentService) {
+        this.webDocumentService = webDocumentService;
+    }
+
+    public HashSet<String> crawl(String url) throws IOException {
+        Elements links = webDocumentService.getDocumentElements(url);
+        for (Element page : links) {
+            String link = page.attr(ATTRIBUTE_KEY);
+            if (isLinkInternal(link, url) && !internalUrls.contains(link)) {
+                internalUrls.add(link);
+                crawl(link);
+            }
+        }
         return internalUrls;
     }
 
-    private void crawl(String url) throws IOException {
-        Document document = Jsoup.connect(url).get();
-        Elements links = document.select(QUERY_REF);
-
-        for (Element page : links) {
-            String newLink = page.attr(ATTRIBUTE_KEY);
-            if (newLink.contains(url) && !internalUrls.contains(newLink)) {
-                internalUrls.add(newLink);
-                crawl(newLink);
-            }
+    private boolean isLinkInternal(String link, String url) {
+        try {
+            URI uri = new URI(url);
+            return link.contains(uri.getHost());
+        } catch (URISyntaxException e) {
+            //ignore the urls with syntax issues
+            return false;
         }
     }
+
 }
